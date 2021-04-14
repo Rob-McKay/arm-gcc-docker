@@ -10,8 +10,7 @@ LABEL maintainer="Rob McKay"
 RUN apt-get update && \
     apt-get install -y ninja-build wget bzip2 binutils binutils-common \
         gcc- gcc-8- cpp- cpp-8- manpages- make- linux-libc-dev- manpages-dev- --no-install-recommends
-RUN wget https://github.com/Kitware/CMake/releases/download/v3.20.1/cmake-3.20.1-linux-x86_64.sh \
-    -O cmake-3.20.1-linux-x86_64.sh  --no-check-certificate && \
+RUN wget https://github.com/Kitware/CMake/releases/download/v3.20.1/cmake-3.20.1-linux-x86_64.sh -O cmake-3.20.1-linux-x86_64.sh -q --no-check-certificate && \
     chmod +x cmake-3.20.1-linux-x86_64.sh && echo y | ./cmake-3.20.1-linux-x86_64.sh && \
     rm cmake-3.20.1-linux-x86_64.sh
 
@@ -19,9 +18,9 @@ RUN wget https://github.com/Kitware/CMake/releases/download/v3.20.1/cmake-3.20.1
 # RUN apt-get install -y git
 
 # get the toolchain
-RUN wget https://developer.arm.com/-/media/Files/downloads/gnu-rm/10-2020q4/gcc-arm-none-eabi-10-2020-q4-major-x86_64-linux.tar.bz2 -O gcc-arm-none-eabi.tar.bz2 --no-check-certificate && \
+RUN wget https://developer.arm.com/-/media/Files/downloads/gnu-rm/10-2020q4/gcc-arm-none-eabi-10-2020-q4-major-x86_64-linux.tar.bz2 -O gcc-arm-none-eabi.tar.bz2 -q --no-check-certificate && \
     mkdir $ARM_GCC_PATH && \
-    tar xjv gcc-arm-none-eabi.tar.bz2 -C $ARM_GCC_PATH --strip-components 1 && \
+    tar xjf gcc-arm-none-eabi.tar.bz2 -C $ARM_GCC_PATH --strip-components 1 && \
     rm gcc-arm-none-eabi.tar.bz2 && \
     rm -rf $ARM_GCC_PATH/share/doc/ $ARM_GCC_PATH/share/gcc-arm-none-eabi/samples/
     
