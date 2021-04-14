@@ -8,10 +8,11 @@ LABEL maintainer="Rob McKay"
 # wget is needed to get the toolchain
 
 RUN apt-get update && \
-    apt-get install -y ninja-build wget bzip2 binutils binutils-common \
-        gcc- gcc-8- cpp- cpp-8- manpages- make- linux-libc-dev- manpages-dev- --no-install-recommends
+    apt-get install -qq -y ninja-build wget bzip2 binutils binutils-common make \
+        gcc- gcc-8- cpp- cpp-8- manpages- linux-libc-dev- manpages-dev- --no-install-recommends
+WORKDIR /opt
 RUN wget https://github.com/Kitware/CMake/releases/download/v3.20.1/cmake-3.20.1-linux-x86_64.sh -O cmake-3.20.1-linux-x86_64.sh -q --no-check-certificate && \
-    chmod +x cmake-3.20.1-linux-x86_64.sh && echo y | ./cmake-3.20.1-linux-x86_64.sh && \
+    chmod +x cmake-3.20.1-linux-x86_64.sh && echo -e y'\n'y | ./cmake-3.20.1-linux-x86_64.sh && \
     rm cmake-3.20.1-linux-x86_64.sh
 
 # Adding git bloats the image by 95MB
@@ -25,5 +26,5 @@ RUN wget https://developer.arm.com/-/media/Files/downloads/gnu-rm/10-2020q4/gcc-
     rm -rf $ARM_GCC_PATH/share/doc/ $ARM_GCC_PATH/share/gcc-arm-none-eabi/samples/
     
 # add the tools to the path
-ENV PATH="$ARM_GCC_PATH/bin:${PATH}"
+ENV PATH="/opt/cmake-3.20.1-linux-x86_64/bin:$ARM_GCC_PATH/bin:${PATH}"
 WORKDIR /home/build
