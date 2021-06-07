@@ -9,10 +9,15 @@ LABEL maintainer="Rob McKay"
 
 RUN apt-get update && \
     apt-get install -qq -y ninja-build wget bzip2 binutils binutils-common make \
-        gcc- gcc-8- cpp- cpp-8- manpages- linux-libc-dev- manpages-dev- --no-install-recommends
+        gcc- gcc-8- cpp- cpp-8- manpages- linux-libc-dev- manpages-dev- --no-install-recommends && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
 WORKDIR /opt
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 RUN wget https://github.com/Kitware/CMake/releases/download/v3.20.1/cmake-3.20.1-linux-x86_64.sh -O cmake-3.20.1-linux-x86_64.sh -q --no-check-certificate && \
-    chmod +x cmake-3.20.1-linux-x86_64.sh && echo -e y'\n'y | ./cmake-3.20.1-linux-x86_64.sh && \
+    chmod +x cmake-3.20.1-linux-x86_64.sh && \
+    printf "y\ny\n" | ./cmake-3.20.1-linux-x86_64.sh && \
     rm cmake-3.20.1-linux-x86_64.sh
 
 # Adding git bloats the image by 95MB
