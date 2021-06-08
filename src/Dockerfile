@@ -1,4 +1,5 @@
-FROM debian:buster-slim
+#FROM debian:buster-slim
+FROM redhat/ubi8-minimal
 
 ENV ARM_GCC_PATH=/opt/gcc-arm-none-eabi
 
@@ -7,18 +8,27 @@ LABEL maintainer="Rob McKay"
 
 # wget is needed to get the toolchain
 
-RUN apt-get update && \
-    apt-get install -qq -y ninja-build wget bzip2 binutils binutils-common make \
-        gcc- gcc-8- cpp- cpp-8- manpages- linux-libc-dev- manpages-dev- --no-install-recommends && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+#RUN apt-get update && \
+#    apt-get install -qq -y ninja-build wget bzip2 binutils binutils-common make \
+#        gcc- gcc-8- cpp- cpp-8- manpages- linux-libc-dev- manpages-dev- --no-install-recommends && \
+#    apt-get clean && \
+#    rm -rf /var/lib/apt/lists/*
+
+# It seems that the yum repos are self signed (or there is a missing cert authority in the base image),
+# so modify the ubi repos file to not verify the ssl certificate
+RUN mv /etc/yum.repos.d/ubi.repo ubi-orig && \
+    sed '/^gpgcheck =.*/asslverify = 0' ubi-orig >/etc/yum.repos.d/ubi.repo && \
+    microdnf update && \
+    microdnf upgrade && \
+    microdnf install -y wget bzip2 binutils gzip tar && \
+    rm -rf /var/cache/yum ubi-orig
 
 WORKDIR /opt
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-RUN wget https://github.com/Kitware/CMake/releases/download/v3.20.1/cmake-3.20.1-linux-x86_64.sh -O cmake-3.20.1-linux-x86_64.sh -q --no-check-certificate && \
-    chmod +x cmake-3.20.1-linux-x86_64.sh && \
-    printf "y\ny\n" | ./cmake-3.20.1-linux-x86_64.sh && \
-    rm cmake-3.20.1-linux-x86_64.sh
+#SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+RUN wget https://github.com/Kitware/CMake/releases/download/v3.20.3/cmake-3.20.3-linux-x86_64.sh -O cmake-3.20.3-linux-x86_64.sh -q --no-check-certificate && \
+    chmod +x cmake-3.20.3-linux-x86_64.sh && \
+    printf "y\ny\n" | ./cmake-3.20.3-linux-x86_64.sh && \
+    rm cmake-3.20.3-linux-x86_64.sh
 
 # Adding git bloats the image by 95MB
 # RUN apt-get install -y git
