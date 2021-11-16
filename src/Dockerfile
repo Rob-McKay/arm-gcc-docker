@@ -8,10 +8,12 @@ LABEL maintainer="Rob McKay"
 # wget is needed to get the toolchain
 
 RUN apt-get update && \
-    apt-get install -qq -y ninja-build wget bzip2 binutils binutils-common make \
+    apt-get install -qq -y ninja-build wget bzip2 binutils binutils-common make libpath-tiny-perl \
         gcc- gcc-8- cpp- cpp-8- manpages- linux-libc-dev- manpages-dev- --no-install-recommends && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+RUN cpan -i Digest::CRC
 
 WORKDIR /opt
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
