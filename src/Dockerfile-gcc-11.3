@@ -2,13 +2,13 @@ FROM debian:bookworm-slim
 
 ENV ARM_GCC_PATH=/opt/gcc-arm-none-eabi
 
-LABEL Description="Image for building and debugging arm-embedded projects using the GCC ARM toolchain (gcc-arm-none-eabi-11.3-rel1). Includes CMake 3.24 and Pyton 3.10"
+LABEL Description="Image for building and debugging arm-embedded projects using the GCC ARM toolchain (gcc-arm-none-eabi-11.3-rel1). Includes CMake 3.25 and Pyton 3.11"
 LABEL maintainer="Rob McKay"
 
 # wget is needed to get the toolchain
 
 RUN apt-get update && \
-    apt-get install -qq -y ninja-build wget bzip2 xz-utils binutils binutils-common make libpath-tiny-perl python3 python3-pip\
+    apt-get install -qq -y ninja-build wget bzip2 xz-utils binutils binutils-common make libpath-tiny-perl python3.11 python3-pip\
         gcc- cpp- manpages- linux-libc-dev- manpages-dev- --no-install-recommends && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
@@ -17,13 +17,10 @@ RUN cpan -i Digest::CRC
 
 WORKDIR /opt
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-RUN wget https://github.com/Kitware/CMake/releases/download/v3.24.2/cmake-3.24.2-linux-x86_64.sh -O cmake-linux-x86_64.sh -q --no-check-certificate && \
+RUN wget https://github.com/Kitware/CMake/releases/download/v3.25.0/cmake-3.25.0-linux-x86_64.sh -O cmake-linux-x86_64.sh -q --no-check-certificate && \
     chmod +x cmake-linux-x86_64.sh && \
     ./cmake-linux-x86_64.sh  --prefix=/opt --include-subdir --skip-licence && \
     rm cmake-linux-x86_64.sh
-
-# Adding git bloats the image by 95MB
-# RUN apt-get install -y git
 
 # get the toolchain
 RUN wget https://developer.arm.com/-/media/Files/downloads/gnu/11.3.rel1/binrel/arm-gnu-toolchain-11.3.rel1-x86_64-arm-none-eabi.tar.xz -O gcc-arm-none-eabi.tar.xz -q --no-check-certificate && \
@@ -33,5 +30,5 @@ RUN wget https://developer.arm.com/-/media/Files/downloads/gnu/11.3.rel1/binrel/
     rm -rf $ARM_GCC_PATH/share/doc/ $ARM_GCC_PATH/share/gcc-arm-none-eabi/samples/
     
 # add the tools to the path
-ENV PATH="/opt/cmake-3.24.2-linux-x86_64/bin:$ARM_GCC_PATH/bin:${PATH}"
+ENV PATH="/opt/cmake-3.25.0-linux-x86_64/bin:$ARM_GCC_PATH/bin:${PATH}"
 WORKDIR /home/build
