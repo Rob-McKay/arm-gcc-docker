@@ -30,5 +30,5 @@ RUN wget https://developer.arm.com/-/media/Files/downloads/gnu/12.2.rel1/binrel/
     rm -rf $ARM_GCC_PATH/share/doc/ $ARM_GCC_PATH/share/gcc-arm-none-eabi/samples/
     
 # add the tools to the path
-ENV PATH="/opt/cmake-3.25.0-linux-x86_64/bin:$ARM_GCC_PATH/bin:${PATH}"
+ENV PATH="/opt/cmake-3.25.2-linux-x86_64/bin:$ARM_GCC_PATH/bin:${PATH}"
 WORKDIR /home/build
