@@ -2,7 +2,7 @@ FROM debian:bookworm-slim
 
 ENV ARM_GCC_PATH=/opt/gcc-arm-none-eabi
 
-LABEL Description="Image for building and debugging arm-embedded projects using the GCC ARM toolchain (gcc-arm-none-eabi-12.2-rel1). Includes CMake 3.25 and Python 3.11 (debian bookworm default)"
+LABEL Description="Image for building and debugging arm-embedded projects using the GCC ARM toolchain (gcc-arm-none-eabi-12.2-rel1). Includes CMake 3.25 and Python 3.11 (debian bookworm default) with pylint and pyserial"
 LABEL maintainer="Rob McKay"
 
 # wget is needed to get the toolchain
@@ -12,7 +12,7 @@ RUN apt-get update && \
         gcc- cpp- manpages- linux-libc-dev- manpages-dev- --no-install-recommends && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
-# RUN pip3 install pylint
+RUN pip3 install --break-system-packages pyserial
 RUN cpan -i Digest::CRC
 
 WORKDIR /opt
