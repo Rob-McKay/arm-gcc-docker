@@ -12,7 +12,8 @@ RUN apt-get update && \
         gcc- cpp- manpages- linux-libc-dev- manpages-dev- --no-install-recommends && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
-RUN pip3 install pylint
+RUN apt install python3-pylint
+# RUN pip3 install pylint
 RUN cpan -i Digest::CRC
 
 WORKDIR /opt
