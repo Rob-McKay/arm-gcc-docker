@@ -17,7 +17,7 @@ RUN cpan -i Digest::CRC
 
 WORKDIR /opt
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-RUN wget https://github.com/Kitware/CMake/releases/download/v3.25.0/cmake-3.25.0-linux-x86_64.sh -O cmake-linux-x86_64.sh -q --no-check-certificate && \
+RUN wget https://github.com/Kitware/CMake/releases/download/v3.25.2/cmake-3.25.2-linux-x86_64.sh -O cmake-linux-x86_64.sh -q --no-check-certificate && \
     chmod +x cmake-linux-x86_64.sh && \
     ./cmake-linux-x86_64.sh  --prefix=/opt --include-subdir --skip-licence && \
     rm cmake-linux-x86_64.sh
