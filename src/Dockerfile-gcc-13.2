@@ -1,10 +1,10 @@
-FROM debian:bookworm-slim
+FROM debian:stable-slim
 
 ARG CMAKE_VER=3.27.8
 
 ENV ARM_GCC_PATH=/opt/gcc-arm-none-eabi
 
-LABEL Description="Image for building and debugging arm-embedded projects using the GCC ARM toolchain (gcc-arm-none-eabi-12.2-rel1). Includes CMake 3.25 and Python 3.11 (debian bookworm default) with pylint and pyserial"
+LABEL Description="Image for building and debugging arm-embedded projects using the GCC ARM toolchain (gcc-arm-none-eabi-12.2-rel1). Includes CMake ${CMAKE_VER} and Python 3.11 (debian bookworm default) with pylint and pyserial"
 LABEL maintainer="Rob McKay"
 
 # wget is needed to get the toolchain
