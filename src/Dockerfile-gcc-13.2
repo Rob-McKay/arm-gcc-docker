@@ -14,7 +14,7 @@ RUN apt-get update && \
         gcc- cpp- manpages- linux-libc-dev- manpages-dev- --no-install-recommends && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
-RUN python3 -m pip install --upgrade pip
+RUN python3 -m pip install --break-system-packages --upgrade pip
 RUN pip3 install --break-system-packages pyserial
 RUN cpan -i Digest::CRC
 
